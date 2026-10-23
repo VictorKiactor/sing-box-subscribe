@@ -1,9 +1,12 @@
 import base64,json,re
 from urllib.parse import quote, unquote
+from parsers.anytls import to_uri as anytls_to_uri
 
 def clash2v2ray(share_link):
     link = ''
-    if share_link['type'] == 'vmess':
+    if share_link['type'] == 'anytls':
+        return anytls_to_uri(share_link)
+    elif share_link['type'] == 'vmess':
         try:
             vmess_info = {
                 "v": "2",

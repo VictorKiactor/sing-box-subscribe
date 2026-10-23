@@ -138,7 +138,7 @@ def config(url):
                 param = urlparse(encoded_url.rsplit('&', 1)[-1])
             else:
                 param = urlparse(encoded_url.split('&', 1)[-1])
-            request.args = dict(item.split('=') for item in param.path.split('&'))
+            request.args = dict(item.split('=', 1) for item in param.path.split('&') if '=' in item)
             if request.args.get('prefix'):
                 request.args['prefix'] = unquote(request.args['prefix'])
             if request.args.get('eps'):
@@ -154,7 +154,7 @@ def config(url):
     else:
         if any(substring in query_string for substring in ['&emoji=', '&file=', '&eps=', '&enn=']):
             param = urlparse(query_string.split('&', 1)[-1])
-            request.args = dict(item.split('=') for item in param.path.split('&'))
+            request.args = dict(item.split('=', 1) for item in param.path.split('&') if '=' in item)
             if request.args.get('prefix'):
                 request.args['prefix'] = unquote(request.args['prefix'])
             if request.args.get('eps'):
@@ -220,7 +220,7 @@ def config(url):
     if '/api/v4/projects/' in full_url:
         parts = full_url.split('/api/v4/projects/')
         full_url = parts[0] + '/api/v4/projects/' + parts[1].replace('/', '%2F', 1)
-    print (full_url)
+    # Subscription URLs may contain account tokens; do not log them.
     url_parts = full_url.split('|')
     if len(url_parts) > 1:
         subscribe['url'] = full_url.split('url=', 1)[-1].split('|')[0] if full_url.startswith('url') else full_url.split('|')[0]

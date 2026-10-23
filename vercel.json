@@ -1,11 +1,10 @@
 {
+    "$schema": "https://openapi.vercel.sh/vercel.json",
+    "framework": "flask",
     "functions": {
         "api/app.py": {
-          "maxDuration": 60
+          "maxDuration": 60,
+          "excludeFiles": "{tests/**,.private-validation/**,.venv/**}"
         }
-    },
-    "rewrites": [
-        { "source": "/(.*)", "destination": "/api/app" }
-    ],
-    "outputDirectory": "tmp"
+    }
 }

@@ -1,0 +1,16 @@
+[project]
+name = "sing-box-subscribe"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "requests",
+    "paramiko",
+    "scp",
+    "chardet",
+    "PyYAML",
+    "ruamel.yaml",
+    "Flask==2.3.2",
+]
+
+[tool.vercel]
+entrypoint = "api.app:app"

@@ -197,7 +197,7 @@ def parse_content(content):
         try:
             node = factory(t)
         except Exception as e:  #节点解析失败，跳过
-            pass
+            continue
         if node:
             nodelist.append(node)
     return nodelist
@@ -221,10 +221,11 @@ def get_parser(node):
 
 def get_content_from_url(url, n=10):
     UA = ''
-    print('处理: \033[31m' + url + '\033[0m')
+    # Do not put subscription tokens or inline node credentials in service logs.
+    print('处理订阅: ' + (urlparse(url).hostname or 'inline subscription'))
     # print('Đang tải link đăng ký: \033[31m' + url + '\033[0m')
     prefixes = ["vmess://", "vless://", "ss://", "ssr://", "trojan://", "tuic://", "hysteria://", "hysteria2://",
-                "hy2://", "wg://", "wireguard://", "http2://", "socks://", "socks5://"]
+                "hy2://", "wg://", "wireguard://", "http2://", "socks://", "socks5://", "anytls://"]
     if any(url.startswith(prefix) for prefix in prefixes):
         response_text = tool.noblankLine(url)
         return response_text
@@ -238,7 +239,7 @@ def get_content_from_url(url, n=10):
     while concount <= n and not response:
         print('连接出错，正在进行第 ' + str(concount) + ' 次重试，最多重试 ' + str(n) + ' 次...')
         # print('Lỗi kết nối, đang thử lại '+str(concount)+'/'+str(n)+'...')
-        response = tool.getResponse(url)
+        response = tool.getResponse(url, custom_user_agent=UA)
         concount = concount + 1
         time.sleep(1)
     if not response:
